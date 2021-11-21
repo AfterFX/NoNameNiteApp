@@ -20,6 +20,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // credentials context
 import { CredentialsContext } from '../components/CredentialsContext';
 
+// keyboard avoiding view
+import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper'
+
 const Welcome = () => {
     // credentials context
     const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
@@ -37,6 +40,7 @@ const Welcome = () => {
     };
 
     return (
+        <KeyboardAvoidingWrapper>
         <>
             <StatusBar style="light" />
             <InnerContainer>
@@ -57,6 +61,7 @@ const Welcome = () => {
                 </WelcomeContainer>
             </InnerContainer>
         </>
+        </KeyboardAvoidingWrapper>
     );
 };
 
