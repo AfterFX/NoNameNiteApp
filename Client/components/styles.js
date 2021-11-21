@@ -30,10 +30,12 @@ export const InnerContainer = styled.View`
     align-items: center;
 `;
 
-export const WelcomeContainer = styled(InnerContainer)`
-    padding: 25px;
-    padding-top: 10px;
-    justify-content: center;
+export const WelcomeContainer = styled.View`
+  width: 300px;
+  height: 700px;
+  margin: auto;
+  justify-content: center;
+    
 `;
 
 export const PageLogo = styled.Image`
