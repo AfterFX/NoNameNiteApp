@@ -18,7 +18,7 @@ db.authenticate()
 .then(() => {
     console.log("Logged in to DB");
     User.init(db);
-    User.sync();s
+    User.sync();
 
     User.findOrCreate({
         where: {id: 1}
