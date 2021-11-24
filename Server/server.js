@@ -45,7 +45,7 @@ app.post("/user/signin", (req, res) => {
     })
 });
 
-app.post("/user/Signup", (req, res) => {
+app.post("/user/signup", (req, res) => {
     User.findOne({
         where: {id: 1}
     }).then(r => {
