@@ -56,10 +56,9 @@ const Login = ({ navigation }) => {
 
   // credentials context
   const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext);
-
     const handleLogin =  async (credentials, setSubmitting) => {
         handleMessage(null);
-        const url = 'http://192.168.1.107:8081/user/signin'
+        const url = `${Server.ip}/user/signin`
         axios
             .post(url, credentials)
             .then((response) => {
@@ -69,7 +68,7 @@ const Login = ({ navigation }) => {
                 if (status !== 'SUCCESS') {
                     handleMessage(message, status);
                 } else {
-                    persistLogin({ ...data[0] }, message, status);
+                    persistLogin({ ...data }, message, status);
                 }
                 setSubmitting(false);
             })

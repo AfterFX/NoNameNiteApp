@@ -74,7 +74,7 @@ const Signup = ({ navigation }) => {
     //form handling
     const handleSignup =  async (credentials, setSubmitting) => {
         handleMessage(null);
-        const url = 'http://192.168.1.107:8081/user/Signup'
+        const url = `${Server.ip}/user/Signup`
         axios
             .post(url, credentials)
             .then((response) => {
