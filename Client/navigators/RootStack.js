@@ -16,7 +16,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import Login from '../screens/Login';
 import Signup from '../screens/Signup';
 import Welcome from '../screens/Welcome';
-import HTMLtest from '../screens/HTMLtest';
+import dragNdrop from '../screens/dragNdrop';
+import dragNdropColor from '../screens/dragNdropColor';
 
 const Stack = createStackNavigator();
 
@@ -78,7 +79,8 @@ const RootStack = () => {
                             >
                                     <>
                                         <Drawer.Screen options={{ headerTintColor: primary }} name="Welcome" component={Welcome}/>
-                                        <Drawer.Screen options={{ headerTintColor: primary }} name="HTMLtest" component={HTMLtest}/>
+                                        <Drawer.Screen options={{ headerTintColor: primary }} name="dragNdrop" component={dragNdrop}/>
+                                        <Drawer.Screen options={{ headerTintColor: primary }} name="dragNdropColor" component={dragNdropColor}/>
                                     </>
                             </Drawer.Navigator>
                         </>
