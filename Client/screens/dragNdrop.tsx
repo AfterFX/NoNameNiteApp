@@ -256,7 +256,7 @@ const dragNdrop = () => {
                                     console.log(`goodbye ${payload}`);
                                 }}
                                 onReceiveDragDrop={({ dragged: { payload } }) => {
-                                    console.log(`received1 ${payload}`);
+                                    console.log(`received ${payload}`);
                                 }}
                             />
                         </View>
