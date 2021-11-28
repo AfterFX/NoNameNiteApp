@@ -9,7 +9,7 @@ const { primary } = Colors;
 
 const KeyboardAvoidingWrapper = ({ children }) => {
   return (
-    <KeyboardAvoidingView style={{ flex: 1, backgroundColor: primary }}>
+    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1, backgroundColor: primary }}>
       <ScrollView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>{children}</TouchableWithoutFeedback>
       </ScrollView>

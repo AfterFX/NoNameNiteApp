@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
+import {View, Text, TouchableOpacity, TextInput, Image, StyleSheet, Dimensions} from 'react-native';
 import Constants from 'expo-constants';
 
 const StatusBarHeight = Constants.statusBarHeight;
@@ -182,3 +182,76 @@ export const TextLinkContent = styled.Text`
     color: ${brand};
     font-size: 15px;
 `;
+
+export const Drax = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 12,
+        paddingTop: 40,
+        justifyContent: 'space-evenly',
+    },
+    centeredContent: {
+        borderRadius: 10,
+    },
+    receivingZone: {
+        height: (Dimensions.get('window').width / 4) - 12,
+        borderRadius: 10,
+        width: (Dimensions.get('window').width / 4) - 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 5
+    },
+    receiving: {
+        borderColor: 'red',
+        borderWidth: 2,
+    },
+    draggableBox: {
+        width: (Dimensions.get('window').width / 4) - 12,
+        height: (Dimensions.get('window').width / 4) - 12,
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 5
+    },
+    dragging: {
+        opacity: 0.2,
+    },
+    hoverDragging: {
+        borderColor: 'magenta',
+        borderWidth: 2,
+    },
+    receivingContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly'
+    },
+    itemSeparator: {
+        height: 15
+    },
+    draxListContainer: {
+        padding: 5,
+        height: 200
+    },
+    receivingZoneContainer: {
+        padding: 5,
+        height: 100
+    },
+    textStyle: {
+        fontSize: 18
+    },
+    headerStyle: {
+        paddingTop: StatusBarHeight + 35,
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginLeft: 20
+    },
+    draggable: {
+        width: 100,
+        height: 100,
+        backgroundColor: 'blue',
+    },
+    receiver: {
+        width: 100,
+        height: 100,
+        backgroundColor: 'green',
+    },
+});
