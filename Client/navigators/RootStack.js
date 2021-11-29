@@ -18,6 +18,7 @@ import Signup from '../screens/Signup';
 import Welcome from '../screens/Welcome';
 import dragNdrop from '../screens/dragNdrop';
 import dragNdropColor from '../screens/dragNdropColor';
+import Battle from '../screens/Battle';
 
 const Stack = createStackNavigator();
 
@@ -81,6 +82,7 @@ const RootStack = () => {
                                         <Drawer.Screen options={{ headerTintColor: primary }} name="Welcome" component={Welcome}/>
                                         <Drawer.Screen options={{ headerTintColor: primary }} name="dragNdrop" component={dragNdrop}/>
                                         <Drawer.Screen options={{ headerTintColor: primary }} name="dragNdropColor" component={dragNdropColor}/>
+                                        <Drawer.Screen options={{ headerTintColor: primary }} name="Battle" component={Battle}/>
                                     </>
                             </Drawer.Navigator>
                         </>
