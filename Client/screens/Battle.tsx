@@ -1,4 +1,4 @@
-import React, {useContext, useRef, useCallback, useState} from 'react';
+import React, {useContext, useRef, useCallback, useState, Component} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {Text, View, StyleSheet, Animated, Dimensions, Image, TouchableOpacity, ImageBackground} from 'react-native';
 
@@ -45,72 +45,64 @@ const Battle = () => {
           })
           .catch((error) => console.log(error));
     };
-
-    const player = useRef(new Animated.Value(0));
-    const enemy = useRef(new Animated.Value(0));
-    const meteorAnim = useRef(new Animated.ValueXY({x: 0, y: 0}));
-    const meteorScale = useRef(new Animated.Value(1));
-    const opacity = new Animated.Value(0);
-    const testX = new Animated.Value(0);
-    const testY = new Animated.Value(0);
+    const state = {
+        player: useRef(new Animated.Value(0)),
+        enemy: useRef(new Animated.Value(0)),
+        meteorAnim: useRef(new Animated.ValueXY({x: 0, y: 0})),
+        meteorScale: useRef(new Animated.Value(1)),
+        opacity: new Animated.Value(0),
+        AnimationPositionX: new Animated.Value(0),
+        AnimationPositionY: new Animated.Value(0),
+    }
 
 
     const meteorScaleStyles = {
         transform: [
-            { scale: meteorScale.current }
+            { scale: state.meteorScale.current }
         ]
     }
 
     return (
         <View style={styles.container}>
             <>
-                <Animated.View style={[ styles.Enemy, { transform: [{ translateY: enemy.current }] }]}>
-
-
+                <Animated.View style={[ styles.Enemy, { transform: [{ translateY: state.enemy.current }] }]}>
                     <Avatar source={require("../assets/img/characters/Villain_Ozzie_drawn_ChronoTrigger.png")}/>
-                    <Animated.View  style={[ meteorScaleStyles, {opacity: opacity, marginTop: testX, marginLeft: testY}, styles.box, meteorAnim.current.getLayout()]}/>
+                    <Animated.View  style={[ meteorScaleStyles, {opacity: state.opacity, marginTop: state.AnimationPositionX, marginLeft: state.AnimationPositionY}, styles.box, state.meteorAnim.current.getLayout()]}/>
                 </Animated.View>
             </>
             <>
 
-                <Animated.View style={[ styles.Player, { transform: [{ translateY: player.current }] }]}>
+                <Animated.View style={[ styles.Player, { transform: [{ translateY: state.player.current }] }]}>
                     <Avatar source={require("../assets/img/characters/CT1.jpeg")}/>
                 </Animated.View>
 
-
-                {/*<Animated.View style={[ meteorScaleStyles, {opacity: opacity}, styles.box, meteorAnim.current.getLayout()]}/>*/}
-
-
-
-
-
                 <View style={styles.skillsContainer}>
                     <View style={styles.skills}>
-                        <TouchableOpacity onPress={() => [opacity.setValue(1), meteor(opacity, meteorAnim, meteorScale, testX, testY)]}>
+                        <TouchableOpacity onPress={() => [state.opacity.setValue(1), meteor(state)]}>
                                 <ImageBackground source={require("../assets/img/skills/skill1.png")} style={styles.skillImage}>
                                     <Text style={styles.skill_title}>skill 1</Text>
                                 </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => [opacity.setValue(1), meteor(opacity, meteorAnim, meteorScale)]}>
+                        <TouchableOpacity onPress={() => [state.opacity.setValue(1), meteor(state.opacity, state.meteorAnim, state.meteorScale)]}>
                             <ImageBackground source={require("../assets/img/skills/skill2.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 2</Text>
                             </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => shake(player, enemy)}>
+                        <TouchableOpacity onPress={() => shake(state)}>
                             <ImageBackground source={require("../assets/img/skills/skill3.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 3</Text>
                             </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => shake(player, enemy)}>
+                        <TouchableOpacity onPress={() => shake(state)}>
                             <ImageBackground source={require("../assets/img/skills/skill4.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 4</Text>
                             </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => shake(player, enemy)}>
+                        <TouchableOpacity onPress={() => shake(state)}>
                             <ImageBackground source={require("../assets/img/skills/skill5.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 5</Text>
                             </ImageBackground>
@@ -183,10 +175,10 @@ const styles = StyleSheet.create({
     },
     box: {
         position: "absolute",
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        backgroundColor: 'red',
+        width: 20,
+        height: 20,
+        borderRadius: 100,
+        backgroundColor: '#ff592c',
         alignItems: 'center',
         justifyContent: 'center',
     },
