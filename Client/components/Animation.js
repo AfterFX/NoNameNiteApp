@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {View, Text, TouchableOpacity, TextInput, Image, StyleSheet, Dimensions, Animated} from 'react-native';
+import {View, Text, TouchableOpacity, TextInput, Image, StyleSheet, Dimensions, Animated, Easing} from 'react-native';
 import Constants from 'expo-constants';
 import {useCallback} from "react";
 
@@ -59,4 +59,37 @@ export const shake = (player, enemy) => {
             { iterations: 1 }
         ).start();
     });
+};
+
+export const meteor = (opacity, meteorAnim, meteorScale) => {
+    Animated.sequence([
+        //meteor moving
+        Animated.timing(meteorAnim.current, {
+            useNativeDriver: false,
+            toValue: {x: -150, y: -250},
+            duration: 1500,
+            // easing: Easing.back(5),
+            // easing: Easing.bounce
+            // easing: Easing.elastic(3)
+            // easing: Easing.bezier(.06,1,.86,.23)
+        }).start(() => {
+            //meteor explode size
+            Animated.timing(meteorScale.current, {
+                toValue: 2,
+                duration: 100,
+                useNativeDriver: false
+            }).start(() => {
+                //hide meteor after explode
+                Animated.timing(opacity, {
+                    toValue: 0,
+                    duration: 1000,
+                    useNativeDriver: false
+                }).start(() => {
+                    //reset meteor location and size
+                    meteorAnim.current.setValue({x: 0, y: 30});
+                    meteorScale.current.setValue(1);
+                });
+            });
+        })
+    ]);
 };

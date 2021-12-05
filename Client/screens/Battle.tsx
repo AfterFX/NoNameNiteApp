@@ -16,7 +16,7 @@ import {
 } from '../components/styles';
 
 
-import { shake } from '../components/Animation'
+import {meteor, shake} from '../components/Animation'
 
 // Async storage
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -48,28 +48,55 @@ const Battle = () => {
 
     const player = useRef(new Animated.Value(0));
     const enemy = useRef(new Animated.Value(0));
+    const meteorAnim = useRef(new Animated.ValueXY({x: 0, y: 0}));
+    const meteorScale = useRef(new Animated.Value(1));
+    const opacity = new Animated.Value(0);
+
+
+    const meteorScaleStyles = {
+        transform: [
+            { scale: meteorScale.current },
+            // { translateX: 155 },
+            // { translateY: 100 }
+        ]
+    }
 
     return (
         <View style={styles.container}>
             <>
-                <Animated.View style={[ styles.Enemy, { transform: [{ translateY: enemy.current }] }]}>
+                <Animated.View  onLayout={event => {
+                    const layout = event.nativeEvent.layout;
+                    console.log('height:', layout.height);
+                    console.log('width:', layout.width);
+                    console.log('x:', layout.x);
+                    console.log('y:', layout.y);
+                }} style={[ styles.Enemy, { transform: [{ translateY: enemy.current }] }]}>
                     <Avatar source={require("../assets/img/characters/Villain_Ozzie_drawn_ChronoTrigger.png")}/>
                 </Animated.View>
             </>
             <>
+
                 <Animated.View style={[ styles.Player, { transform: [{ translateY: player.current }] }]}>
                     <Avatar source={require("../assets/img/characters/CT1.jpeg")}/>
                 </Animated.View>
-                <View style={styles.skillsContainer}>
 
+
+                {/*<Animated.View style={[ meteorScaleStyles, {opacity: opacity}, styles.box, meteorAnim.current.getLayout()]}/>*/}
+
+
+                <Animated.View  style={[ meteorScaleStyles, {opacity: 1}, styles.box, meteorAnim.current.getLayout()]}/>
+
+
+
+                <View style={styles.skillsContainer}>
                     <View style={styles.skills}>
-                        <TouchableOpacity onPress={() => shake(player, enemy)}>
-                            <ImageBackground source={require("../assets/img/skills/skill1.png")} style={styles.skillImage}>
-                                <Text style={styles.skill_title}>skill 1</Text>
-                            </ImageBackground>
+                        <TouchableOpacity onPress={() => [opacity.setValue(1), meteor(opacity, meteorAnim, meteorScale)]}>
+                                <ImageBackground source={require("../assets/img/skills/skill1.png")} style={styles.skillImage}>
+                                    <Text style={styles.skill_title}>skill 1</Text>
+                                </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => shake(player, enemy)}>
+                        <TouchableOpacity onPress={() => [opacity.setValue(1), meteor(opacity, meteorAnim, meteorScale)]}>
                             <ImageBackground source={require("../assets/img/skills/skill2.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 2</Text>
                             </ImageBackground>
@@ -162,7 +189,18 @@ const styles = StyleSheet.create({
     skillImage: {
         height: 50,
         width: 50
-    }
+    },
+    box: {
+        position: "absolute",
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 305,
+        marginLeft: 350
+    },
 });
 
 export default Battle;
