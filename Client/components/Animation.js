@@ -5,6 +5,14 @@ import {useCallback} from "react";
 
 const StatusBarHeight = Constants.statusBarHeight;
 
+export const skillUse = (state, skill) => {
+    if(skill === "meteor"){
+        meteor(state)
+    }else if(skill === "shake"){
+        shake(state)
+    }
+}
+
 
 export const shake = (state) => {
     // makes the sequence loop
@@ -62,6 +70,7 @@ export const shake = (state) => {
 };
 
 export const meteor = (state) => {
+    state.opacity.setValue(1)
     const meteorDistance = 1000;
     Animated.sequence([
         //set meteor start position

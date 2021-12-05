@@ -16,7 +16,7 @@ import {
 } from '../components/styles';
 
 
-import {meteor, shake} from '../components/Animation'
+import {meteor, shake, skillUse} from '../components/Animation'
 
 // Async storage
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -78,7 +78,7 @@ const Battle = () => {
 
                 <View style={styles.skillsContainer}>
                     <View style={styles.skills}>
-                        <TouchableOpacity onPress={() => [state.opacity.setValue(1), meteor(state)]}>
+                        <TouchableOpacity onPress={() => skillUse(state, "meteor")}>
                                 <ImageBackground source={require("../assets/img/skills/skill1.png")} style={styles.skillImage}>
                                     <Text style={styles.skill_title}>skill 1</Text>
                                 </ImageBackground>
