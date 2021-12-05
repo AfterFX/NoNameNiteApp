@@ -51,27 +51,24 @@ const Battle = () => {
     const meteorAnim = useRef(new Animated.ValueXY({x: 0, y: 0}));
     const meteorScale = useRef(new Animated.Value(1));
     const opacity = new Animated.Value(0);
+    const testX = new Animated.Value(0);
+    const testY = new Animated.Value(0);
 
 
     const meteorScaleStyles = {
         transform: [
-            { scale: meteorScale.current },
-            // { translateX: 155 },
-            // { translateY: 100 }
+            { scale: meteorScale.current }
         ]
     }
 
     return (
         <View style={styles.container}>
             <>
-                <Animated.View  onLayout={event => {
-                    const layout = event.nativeEvent.layout;
-                    console.log('height:', layout.height);
-                    console.log('width:', layout.width);
-                    console.log('x:', layout.x);
-                    console.log('y:', layout.y);
-                }} style={[ styles.Enemy, { transform: [{ translateY: enemy.current }] }]}>
+                <Animated.View style={[ styles.Enemy, { transform: [{ translateY: enemy.current }] }]}>
+
+
                     <Avatar source={require("../assets/img/characters/Villain_Ozzie_drawn_ChronoTrigger.png")}/>
+                    <Animated.View  style={[ meteorScaleStyles, {opacity: opacity, marginTop: testX, marginLeft: testY}, styles.box, meteorAnim.current.getLayout()]}/>
                 </Animated.View>
             </>
             <>
@@ -84,13 +81,12 @@ const Battle = () => {
                 {/*<Animated.View style={[ meteorScaleStyles, {opacity: opacity}, styles.box, meteorAnim.current.getLayout()]}/>*/}
 
 
-                <Animated.View  style={[ meteorScaleStyles, {opacity: 1}, styles.box, meteorAnim.current.getLayout()]}/>
 
 
 
                 <View style={styles.skillsContainer}>
                     <View style={styles.skills}>
-                        <TouchableOpacity onPress={() => [opacity.setValue(1), meteor(opacity, meteorAnim, meteorScale)]}>
+                        <TouchableOpacity onPress={() => [opacity.setValue(1), meteor(opacity, meteorAnim, meteorScale, testX, testY)]}>
                                 <ImageBackground source={require("../assets/img/skills/skill1.png")} style={styles.skillImage}>
                                     <Text style={styles.skill_title}>skill 1</Text>
                                 </ImageBackground>
@@ -166,11 +162,6 @@ const styles = StyleSheet.create({
 
     },
     skills: {
-        // flex: 1,
-        // flexDirection: 'row',
-        // justifyContent: 'space-evenly',
-        // padding:10
-        // justifyContent: 'center',
         alignItems: 'center',
         flex:2,
         flexDirection:"row",
@@ -198,8 +189,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'red',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 305,
-        marginLeft: 350
     },
 });
 

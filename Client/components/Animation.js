@@ -61,12 +61,14 @@ export const shake = (player, enemy) => {
     });
 };
 
-export const meteor = (opacity, meteorAnim, meteorScale) => {
+export const meteor = (opacity, meteorAnim, meteorScale, testX, testY) => {
     Animated.sequence([
+        testX.setValue(300),
+        testY.setValue(190),
         //meteor moving
         Animated.timing(meteorAnim.current, {
             useNativeDriver: false,
-            toValue: {x: -150, y: -250},
+            toValue: {x: -170, y: -270},
             duration: 1500,
             // easing: Easing.back(5),
             // easing: Easing.bounce
@@ -86,7 +88,7 @@ export const meteor = (opacity, meteorAnim, meteorScale) => {
                     useNativeDriver: false
                 }).start(() => {
                     //reset meteor location and size
-                    meteorAnim.current.setValue({x: 0, y: 30});
+                    meteorAnim.current.setValue({x: 0, y: 0});
                     meteorScale.current.setValue(1);
                 });
             });
