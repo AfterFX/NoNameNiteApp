@@ -72,10 +72,9 @@ export const shake = (state) => {
 export const meteor = (state) => {
     state.opacity.setValue(1)
     const meteorDistance = 1000;
-    Animated.sequence([
         //set meteor start position
-        state.AnimationPositionX.setValue(320+meteorDistance),
-        state.AnimationPositionY.setValue(210+meteorDistance),
+        state.AnimationPositionX.setValue(320+meteorDistance);
+        state.AnimationPositionY.setValue(210+meteorDistance);
         //meteor moving
         Animated.timing(state.meteorAnim.current, {
             useNativeDriver: false,
@@ -104,5 +103,4 @@ export const meteor = (state) => {
                 });
             });
         })
-    ]);
 };
