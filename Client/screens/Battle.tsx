@@ -17,6 +17,7 @@ import {
 
 
 import {meteor, shake, skillUse} from '../components/Animation'
+import {SkillUse} from '../components/Animation'
 
 // Async storage
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -55,19 +56,12 @@ const Battle = () => {
         AnimationPositionY: new Animated.Value(0),
     }
 
-
-    const meteorScaleStyles = {
-        transform: [
-            { scale: state.meteorScale.current }
-        ]
-    }
-
     return (
         <View style={styles.container}>
             <>
                 <Animated.View style={[ styles.Enemy, { transform: [{ translateY: state.enemy.current }] }]}>
                     <Avatar source={require("../assets/img/characters/Villain_Ozzie_drawn_ChronoTrigger.png")}/>
-                    <Animated.View  style={[ meteorScaleStyles, {opacity: state.opacity, marginTop: state.AnimationPositionX, marginLeft: state.AnimationPositionY}, styles.box, state.meteorAnim.current.getLayout()]}/>
+                    <Animated.View  style={[new SkillUse(state).state.skillAnim]}/>
                 </Animated.View>
             </>
             <>
@@ -78,7 +72,7 @@ const Battle = () => {
 
                 <View style={styles.skillsContainer}>
                     <View style={styles.skills}>
-                        <TouchableOpacity onPress={() => skillUse(state, "meteor")}>
+                        <TouchableOpacity onPress={() => new SkillUse(state)}>
                                 <ImageBackground source={require("../assets/img/skills/skill1.png")} style={styles.skillImage}>
                                     <Text style={styles.skill_title}>skill 1</Text>
                                 </ImageBackground>
@@ -114,7 +108,7 @@ const Battle = () => {
         </View>
     );
 };
-console.log(Dimensions.get('window'))
+// console.log(Dimensions.get('window'))
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -172,16 +166,7 @@ const styles = StyleSheet.create({
     skillImage: {
         height: 50,
         width: 50
-    },
-    box: {
-        position: "absolute",
-        width: 20,
-        height: 20,
-        borderRadius: 100,
-        backgroundColor: '#ff592c',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
+    }
 });
 
 export default Battle;

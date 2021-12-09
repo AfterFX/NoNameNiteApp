@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import {View, Text, TouchableOpacity, TextInput, Image, StyleSheet, Dimensions, Animated, Easing} from 'react-native';
 import Constants from 'expo-constants';
-import {useCallback} from "react";
+import {Component, useCallback} from "react";
+import alert from "react-native-web/dist/exports/Alert";
 
 const StatusBarHeight = Constants.statusBarHeight;
 
 export const skillUse = (state, skill) => {
+
     if(skill === "meteor"){
         meteor(state)
     }else if(skill === "shake"){
@@ -69,14 +71,22 @@ export const shake = (state) => {
     });
 };
 
-export const meteor = (state) => {
-    state.opacity.setValue(1)
-    const meteorDistance = 1000;
+export class SkillUse extends Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            skillAnim: props.skillAnim
+        };
+
+       this.state.skillAnim = [{opacity: props.opacity, transform: [ { scale: props.meteorScale.current } ], marginTop: props.AnimationPositionX, marginLeft: props.AnimationPositionY}, props.meteorAnim.current.getLayout(), styles.meteor]
+
+        props.opacity.setValue(1)
+        const meteorDistance = 1000;
         //set meteor start position
-        state.AnimationPositionX.setValue(320+meteorDistance);
-        state.AnimationPositionY.setValue(210+meteorDistance);
+        props.AnimationPositionX.setValue(320+meteorDistance);
+        props.AnimationPositionY.setValue(210+meteorDistance);
         //meteor moving
-        Animated.timing(state.meteorAnim.current, {
+        Animated.timing(props.meteorAnim.current, {
             useNativeDriver: false,
             toValue: {x: (-170+(-meteorDistance)), y: (-270+(-meteorDistance))},
             duration: 750,
@@ -86,21 +96,44 @@ export const meteor = (state) => {
             // easing: Easing.bezier(.06,1,.86,.23)
         }).start(() => {
             //meteor explode size
-            Animated.timing(state.meteorScale.current, {
+            Animated.timing(props.meteorScale.current, {
                 toValue: 10,
                 duration: 100,
                 useNativeDriver: false
             }).start(() => {
                 //hide meteor after explode
-                Animated.timing(state.opacity, {
+                Animated.timing(props.opacity, {
                     toValue: 0,
                     duration: 1000,
                     useNativeDriver: false
                 }).start(() => {
                     //reset meteor location and size
-                    state.meteorAnim.current.setValue({x: 0, y: 0});
-                    state.meteorScale.current.setValue(1);
+                    props.meteorAnim.current.setValue({x: 0, y: 0});
+                    props.meteorScale.current.setValue(1);
                 });
             });
         })
-};
+    }
+    componentDidMount() {
+        this.setState({ skillAnim: 1 })
+    }
+
+    render() {
+        this.setState({ skillAnim: 1 })
+        return (
+            <Text>awfawfawf</Text>
+        );
+    }
+}
+
+const styles = StyleSheet.create({
+    meteor: {
+        position: "absolute",
+        width: 20,
+        height: 20,
+        borderRadius: 100,
+        backgroundColor: '#ff592c',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+});
