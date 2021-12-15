@@ -20,6 +20,7 @@ import dragNdrop from '../screens/dragNdrop';
 import dragNdropColor from '../screens/dragNdropColor';
 import Battle from '../screens/Battle';
 import Meteor from '../screens/Meteor';
+import ProgressBar from '../screens/ProgressBar';
 
 const Stack = createStackNavigator();
 
@@ -85,6 +86,7 @@ const RootStack = () => {
                                         <Drawer.Screen options={{ headerTintColor: primary }} name="dragNdropColor" component={dragNdropColor}/>
                                         <Drawer.Screen options={{ headerTintColor: primary }} name="Battle" component={Battle}/>
                                         <Drawer.Screen options={{ headerTintColor: primary }} name="Meteor" component={Meteor}/>
+                                        <Drawer.Screen options={{ headerTintColor: primary }} name="ProgressBar" component={ProgressBar}/>
                                     </>
                             </Drawer.Navigator>
                         </>
