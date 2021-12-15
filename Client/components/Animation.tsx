@@ -22,6 +22,24 @@ export class Avoid extends Component<{}, { [key: string]: string }>{
         //set meteor start position
         AnimValues.meteor.PositionX.setValue(320+meteorDistance);
         AnimValues.meteor.PositionY.setValue(210+meteorDistance);
+
+
+
+
+
+        // shift Attacker to the ahead
+        Animated.timing(AnimValues.player, {
+            toValue: -20,
+            duration: 150,
+            useNativeDriver: true
+        }).start(() => {
+            // shift Attacker to the back
+            Animated.timing(AnimValues.player, {
+                toValue: 0,
+                duration: 150,
+                useNativeDriver: true
+            }).start()
+        })
         //meteor moving
         Animated.timing(AnimValues.meteor.XY, {
             useNativeDriver: false,
@@ -38,6 +56,8 @@ export class Avoid extends Component<{}, { [key: string]: string }>{
                 duration: 100,
                 useNativeDriver: false
             }).start(() => {
+                //shake view when meteor explode
+                shake()
                 //hide meteor after explode
                 Animated.timing(AnimValues.meteor.opacity, {
                     toValue: 0,
@@ -53,7 +73,7 @@ export class Avoid extends Component<{}, { [key: string]: string }>{
     }
 }
 
-export const shake = (state: any) => {
+export const attack = (state: any) => {
     // makes the sequence loop
     Animated.loop(
         // runs the animation array in sequence
@@ -126,6 +146,7 @@ const styles = StyleSheet.create({
 export const AnimValues = {
     player: new Animated.Value(0),
     enemy: new Animated.Value(0),
+    shake1: new Animated.Value(0),
     meteor: {
         XY: new Animated.ValueXY({x: 0, y: 0}),
         scale: new Animated.Value(1),
@@ -139,4 +160,26 @@ export const AnimationStates: any = {
     skills:{
         meteor: [{opacity: AnimValues.meteor.opacity, transform: [ { scale: AnimValues.meteor.scale } ], marginTop: AnimValues.meteor.PositionX, marginLeft: AnimValues.meteor.PositionY}, AnimValues.meteor.XY.getLayout(), styles.meteor],
     }
+}
+
+
+
+
+
+
+
+
+const shake = () => {
+    Animated.loop(
+        // runs the animation array in sequence
+        Animated.sequence([
+            // shift element to the left by 2 units
+            Animated.timing(AnimValues.shake1, {toValue: 20, duration: 100, useNativeDriver: false}),
+            Animated.timing(AnimValues.shake1, {toValue: -20, duration: 100, useNativeDriver: false}),
+            Animated.timing(AnimValues.shake1, {toValue: 20, duration: 100, useNativeDriver: false}),
+            Animated.timing(AnimValues.shake1, {toValue: 0, duration: 100, useNativeDriver: false})
+        ]),
+        // loops the above animation config 2 times
+        {iterations: 1}
+    ).start()
 }

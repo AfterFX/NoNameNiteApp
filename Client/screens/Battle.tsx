@@ -17,7 +17,7 @@ import {
 
 
 import {
-    shake,
+    attack,
     AnimValues,
     Avoid,
     AnimationStates
@@ -38,13 +38,11 @@ const Battle = () => {
 
     return (
         <View style={styles.container}>
-            <>
+            <Animated.View style={[ styles.effect, { transform: [{ translateX: AnimValues.shake1 }] }]}>
                 <Animated.View style={[ styles.Enemy, { transform: [{ translateY: AnimValues.enemy }] }]}>
                     <Avatar source={require("../assets/img/characters/Villain_Ozzie_drawn_ChronoTrigger.png")}/>
                     <Animated.View style={SkillMeta}/>
                 </Animated.View>
-            </>
-            <>
 
                 <Animated.View style={[ styles.Player, { transform: [{ translateY: AnimValues.player }] }]}>
                     <Avatar source={require("../assets/img/characters/CT1.jpeg")}/>
@@ -64,19 +62,19 @@ const Battle = () => {
                             </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => shake(AnimValues)}>
+                        <TouchableOpacity onPress={() => attack(AnimValues)}>
                             <ImageBackground source={require("../assets/img/skills/skill3.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 3</Text>
                             </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => shake(AnimValues)}>
+                        <TouchableOpacity onPress={() => attack(AnimValues)}>
                             <ImageBackground source={require("../assets/img/skills/skill4.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 4</Text>
                             </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => shake(AnimValues)}>
+                        <TouchableOpacity onPress={() => attack(AnimValues)}>
                             <ImageBackground source={require("../assets/img/skills/skill5.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 5</Text>
                             </ImageBackground>
@@ -84,7 +82,7 @@ const Battle = () => {
                     </View>
 
                 </View>
-            </>
+            </Animated.View>
         </View>
     );
 };
@@ -92,10 +90,13 @@ const Battle = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         backgroundColor: '#196b61',
         padding: 8,
+        justifyContent: 'center',
+    },
+    effect: {
+        flex: 1,
+        alignItems: 'center',
     },
     Player: {
         position: "absolute",
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ff592c',
         alignItems: 'center',
         justifyContent: 'center',
-    },
+    }
 });
 
 export default Battle;
