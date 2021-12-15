@@ -23,6 +23,12 @@ import {
     AnimationStates
 } from '../components/Animation'
 
+import {
+    getHealthBarBackgroundColor,
+    defaultColorPallet,
+    hexColorRegex
+} from './util/HealthBarUtils';
+
 // credentials context
 import { CredentialsContext } from '../components/CredentialsContext';
 
@@ -35,6 +41,10 @@ const Battle = () => {
         setSkillMeta(AnimationStates.skills[skill])
         new Avoid({props: {skill: skill}})
     };
+    const percentage = 1;
+    const colors = defaultColorPallet;
+
+    console.log( getHealthBarBackgroundColor(percentage, colors))
 
     return (
         <View style={styles.container}>
