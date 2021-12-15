@@ -16,87 +16,67 @@ import {
 } from '../components/styles';
 
 
-import {meteor, shake, skillUse} from '../components/Animation'
-import {SkillUse} from '../components/Animation'
-
-// Async storage
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+    shake,
+    AnimValues,
+    Avoid,
+    AnimationStates
+} from '../components/Animation'
 
 // credentials context
 import { CredentialsContext } from '../components/CredentialsContext';
 
-// keyboard avoiding view
-import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper'
-
-// or any pure javascript modules available in npm
-import { Button } from 'react-native-paper';
 
 const Battle = () => {
-    // credentials context
-    const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
+    const [SkillMeta, setSkillMeta] = useState({});
 
-    const { name, email, photoUrl } = storedCredentials;
-
-    const AvatarImg = photoUrl ? { uri: photoUrl } : require('../assets/img/img1.png');
-
-    const clearLogin = () => {
-      AsyncStorage.removeItem('natureCribCredentials')
-          .then(() => {
-              setStoredCredentials("");
-          })
-          .catch((error) => console.log(error));
+    const UseSkill = (skill: string) => {
+        //render Animation states every time when using skill
+        setSkillMeta(AnimationStates.skills[skill])
+        new Avoid({props: {skill: skill}})
     };
-    const state = {
-        player: useRef(new Animated.Value(0)),
-        enemy: useRef(new Animated.Value(0)),
-        meteorAnim: useRef(new Animated.ValueXY({x: 0, y: 0})),
-        meteorScale: useRef(new Animated.Value(1)),
-        opacity: new Animated.Value(0),
-        AnimationPositionX: new Animated.Value(0),
-        AnimationPositionY: new Animated.Value(0),
-    }
 
     return (
         <View style={styles.container}>
             <>
-                <Animated.View style={[ styles.Enemy, { transform: [{ translateY: state.enemy.current }] }]}>
+                <Animated.View style={[ styles.Enemy, { transform: [{ translateY: AnimValues.enemy }] }]}>
                     <Avatar source={require("../assets/img/characters/Villain_Ozzie_drawn_ChronoTrigger.png")}/>
-                    <Animated.View  style={[new SkillUse(state).state.skillAnim]}/>
+                    <Animated.View style={SkillMeta}/>
                 </Animated.View>
             </>
             <>
 
-                <Animated.View style={[ styles.Player, { transform: [{ translateY: state.player.current }] }]}>
+                <Animated.View style={[ styles.Player, { transform: [{ translateY: AnimValues.player }] }]}>
                     <Avatar source={require("../assets/img/characters/CT1.jpeg")}/>
                 </Animated.View>
 
                 <View style={styles.skillsContainer}>
                     <View style={styles.skills}>
-                        <TouchableOpacity onPress={() => new SkillUse(state)}>
+                        <TouchableOpacity onPress={() => UseSkill("meteor")}>
                                 <ImageBackground source={require("../assets/img/skills/skill1.png")} style={styles.skillImage}>
                                     <Text style={styles.skill_title}>skill 1</Text>
                                 </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => [state.opacity.setValue(1), meteor(state.opacity, state.meteorAnim, state.meteorScale)]}>
+                        <TouchableOpacity onPress={() => new Avoid({props: {skill: "meteor"}})}>
                             <ImageBackground source={require("../assets/img/skills/skill2.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 2</Text>
                             </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => shake(state)}>
+                        <TouchableOpacity onPress={() => shake(AnimValues)}>
                             <ImageBackground source={require("../assets/img/skills/skill3.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 3</Text>
                             </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => shake(state)}>
+                        <TouchableOpacity onPress={() => shake(AnimValues)}>
                             <ImageBackground source={require("../assets/img/skills/skill4.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 4</Text>
                             </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => shake(state)}>
+                        <TouchableOpacity onPress={() => shake(AnimValues)}>
                             <ImageBackground source={require("../assets/img/skills/skill5.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 5</Text>
                             </ImageBackground>
@@ -166,7 +146,16 @@ const styles = StyleSheet.create({
     skillImage: {
         height: 50,
         width: 50
-    }
+    },
+    meteor: {
+        position: "absolute",
+        width: 20,
+        height: 20,
+        borderRadius: 100,
+        backgroundColor: '#ff592c',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 });
 
 export default Battle;
