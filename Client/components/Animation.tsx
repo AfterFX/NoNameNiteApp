@@ -1,6 +1,6 @@
 import {View, Text, TouchableOpacity, TextInput, Image, StyleSheet, Dimensions, Animated, Easing} from 'react-native';
 import Constants from 'expo-constants';
-import React, {Component, useCallback, useRef} from "react";
+import React, {Component, useCallback, useRef, useState} from "react";
 
 const StatusBarHeight = Constants.statusBarHeight;
 
@@ -22,10 +22,6 @@ export class Avoid extends Component<{}, { [key: string]: string }>{
         //set meteor start position
         AnimValues.meteor.PositionX.setValue(320+meteorDistance);
         AnimValues.meteor.PositionY.setValue(210+meteorDistance);
-
-
-
-
 
         // shift Attacker to the ahead
         Animated.timing(AnimValues.player, {
@@ -129,6 +125,61 @@ export const attack = (state: any) => {
 };
 
 
+export const HealthBar = (damage: number) => {
+
+    const [value, setValue] = useState(0)
+    const [PreValue, setPreValue] = useState(0)
+    const state = {
+        width: new Animated.Value(value-(value-PreValue))
+    }
+    console.log(damage)
+
+
+    Animated.timing(state.width, {
+        toValue: value,
+        duration: 400,
+        easing: Easing.bezier(0.45,0.05,0.55,0.95),
+        useNativeDriver: false
+    }).start()
+
+    const handlePress = (choice: boolean) => {
+        if(choice){
+            setValue(value+10)
+            setPreValue(value)
+        }else{
+            setValue(value-10)
+            setPreValue(value)
+        }
+
+    }
+
+    return(
+        <View style={styles.healthBarContainer}>
+            <View style={styles.healthBarBackground}>
+                <Animated.View style={[styles.healthBarProgress, {
+                    width: state.width.interpolate({
+                        inputRange: [0, 100],
+                        outputRange: [`0%`, '100%'],
+                    }),
+                    backgroundColor: state.width.interpolate({
+                        inputRange: [0, 50, 100],
+                        outputRange: ['rgba(248,7,7,0.8)', 'rgba(248,7,7,0.8)', 'rgba(30, 70, 30, 1.0)'],
+                    }),
+                }]}/>
+
+
+            </View>
+            {/*<TouchableOpacity onPress={() => handlePress(true)}>*/}
+            {/*    <Text>Add value</Text>*/}
+            {/*</TouchableOpacity>*/}
+            {/*<TouchableOpacity onPress={() => handlePress(false)}>*/}
+            {/*    <Text>Minus value</Text>*/}
+            {/*</TouchableOpacity>*/}
+        </View>
+    )
+};
+
+
 
 const styles = StyleSheet.create({
     meteor: {
@@ -140,6 +191,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    healthBarContainer: {
+        marginTop: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    healthBarBackground: {
+        position: "relative",
+        width: 200,
+        height: 10,
+        backgroundColor: "#a8a8a8",
+        borderRadius: 4,
+        overflow: "hidden"
+    },
+    healthBarProgress: {
+        position: "absolute",
+        left: 0,
+        backgroundColor: "#a28089",
+        height: "100%",
+        borderRadius: 4
+    }
 });
 
 //Default animation values

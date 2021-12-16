@@ -20,7 +20,8 @@ import {
     attack,
     AnimValues,
     Avoid,
-    AnimationStates
+    AnimationStates,
+    HealthBar
 } from '../components/Animation'
 
 import {
@@ -35,7 +36,6 @@ import { CredentialsContext } from '../components/CredentialsContext';
 
 const Battle = () => {
     const [SkillMeta, setSkillMeta] = useState({});
-
     const UseSkill = (skill: string) => {
         //render Animation states every time when using skill
         setSkillMeta(AnimationStates.skills[skill])
@@ -44,7 +44,7 @@ const Battle = () => {
     const percentage = 1;
     const colors = defaultColorPallet;
 
-    console.log( getHealthBarBackgroundColor(percentage, colors))
+    // console.log( getHealthBarBackgroundColor(percentage, colors))
 
     return (
         <View style={styles.container}>
@@ -52,6 +52,7 @@ const Battle = () => {
                 <Animated.View style={[ styles.Enemy, { transform: [{ translateY: AnimValues.enemy }] }]}>
                     <Avatar source={require("../assets/img/characters/Villain_Ozzie_drawn_ChronoTrigger.png")}/>
                     <Animated.View style={SkillMeta}/>
+                    <HealthBar/>
                 </Animated.View>
 
                 <Animated.View style={[ styles.Player, { transform: [{ translateY: AnimValues.player }] }]}>
