@@ -8,9 +8,19 @@ export const Avoid = (props: any) => {
         const state = {
             skill: props.skill,
         }
-        if(state.skill === "meteor"){
+
+    switch(state.skill) {
+        case "attack":
+            attack(props.HpLeft)
+            // code block
+            break;
+        case "meteor":
             meteor(props.HpLeft)
-        }
+            // code block
+            break;
+        default:
+        // code block
+    }
 }
 
 const meteor = (HpLeft: number) => {
@@ -53,6 +63,7 @@ const meteor = (HpLeft: number) => {
             shake();
             //Using Hp effect
             HpEffect(HpLeft);
+            showDamage()
             //hide meteor after explode
             Animated.timing(AnimValues.meteor.opacity, {
                 toValue: 0,
@@ -67,7 +78,7 @@ const meteor = (HpLeft: number) => {
     })
 }
 
-export const attack = () => {
+export const attack = (HpLeft: number) => {
     // makes the sequence loop
     Animated.loop(
         // runs the animation array in sequence
@@ -88,6 +99,11 @@ export const attack = () => {
         // loops the above animation config 1 times
         { iterations: 1 }
     ).start(() => {
+        //show enemy battle info
+        slashAnim();
+        showDamage();
+        HpEffect(HpLeft);
+
         // shift Attacker to the back
         Animated.timing(AnimValues.player.move, {
             toValue: 0,
@@ -182,13 +198,29 @@ const styles = StyleSheet.create({
         backgroundColor: "#a28089",
         height: "100%",
         borderRadius: 4
+    },
+    slash: {
+        position: "absolute",
+        marginTop: -30,
+        marginLeft: 90,
+        width: 0,
+        height: 0,
+        backgroundColor: "transparent",
+        borderStyle: "solid",
+        borderLeftWidth: 2,
+        borderRightWidth: 2,
+        borderBottomWidth: 100,
+        borderLeftColor: "transparent",
+        borderRightColor: "transparent",
+        borderBottomColor: "white",
+        transform: [{ rotate: "45deg" }],
     }
 });
 
 //Default animation values
 export const AnimValues = {
     player: {move: new Animated.Value(0)},
-    enemy: { move: new Animated.Value(0), HP: new Animated.Value(100)},
+    enemy: { move: new Animated.Value(0), HP: new Animated.Value(100), damage: { opacity: new Animated.Value(0), positionXY: new Animated.ValueXY({x: 0, y: 0}) }},
     shake1: new Animated.Value(0),
     meteor: {
         XY: new Animated.ValueXY({x: 0, y: 0}),
@@ -197,10 +229,15 @@ export const AnimValues = {
         PositionX: new Animated.Value(0),
         PositionY: new Animated.Value(0),
     },
+    slash:{
+        positionXY: new Animated.ValueXY({x: 0, y: 0}),
+        opacity: new Animated.Value(0),
+    },
 }
 
 export const AnimationStates: any = {
     skills:{
+        attack: [styles.slash, {opacity: AnimValues.slash.opacity}, AnimValues.slash.positionXY.getLayout()],
         meteor: [{opacity: AnimValues.meteor.opacity, transform: [ { scale: AnimValues.meteor.scale } ], marginTop: AnimValues.meteor.PositionX, marginLeft: AnimValues.meteor.PositionY}, AnimValues.meteor.XY.getLayout(), styles.meteor],
     }
 }
@@ -234,4 +271,50 @@ const HpEffect = (HpLeft: number) => {
         easing: Easing.bezier(0.45,0.05,0.55,0.95),
         useNativeDriver: false
     }).start()
+}
+
+const showDamage = () => {
+    Animated.timing(AnimValues.enemy.damage.opacity, {
+        toValue: 1,
+        duration: 400,
+        useNativeDriver: false
+    }).start(() => {
+            Animated.timing(AnimValues.enemy.damage.opacity, {
+                toValue: 0,
+                duration: 750,
+                useNativeDriver: false
+            }).start()
+    })
+    Animated.timing(AnimValues.enemy.damage.positionXY, {
+        toValue: {x: 50, y: -50},
+        duration: 1150,
+        easing: Easing.bezier(0.9,0.03,0.69,0.22),
+        // easing: Easing.bezier(.08, 0.91, 0.08, 0.93),
+        useNativeDriver: false
+    }).start(() =>{
+        AnimValues.enemy.damage.positionXY.setValue({x: 0, y: 0});
+    })
+}
+
+const slashAnim = () => {
+    Animated.timing(AnimValues.slash.opacity, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: false
+    }).start(() => {
+        Animated.timing(AnimValues.slash.opacity, {
+            toValue: 0,
+            duration: 500,
+            useNativeDriver: false
+        }).start()
+    })
+    Animated.timing(AnimValues.slash.positionXY, {
+        toValue: {x: -50, y: 50},
+        duration: 600,
+        easing: Easing.bezier(0.08, 0.91, 0.08, 0.93),
+        // easing: Easing.bezier(.08, 0.91, 0.08, 0.93),
+        useNativeDriver: false
+    }).start(() =>{
+        AnimValues.slash.positionXY.setValue({x: 0, y: 0});
+    })
 }

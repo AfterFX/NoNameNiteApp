@@ -47,10 +47,13 @@ const Battle = () => {
                 <View style={styles.Enemy}>
                     <Animated.View style={[ { transform: [{ translateY: AnimValues.enemy.move }] }]}>
                         <Avatar source={require("../assets/img/characters/Villain_Ozzie_drawn_ChronoTrigger.png")}/>
-                        <Animated.View style={SkillMeta}/>
                     </Animated.View>
+                    <Animated.View style={SkillMeta}/>
                     <HealthBar/>
-                        <Text>{HpCurrent}</Text>
+                    <Animated.View style={[styles.damageContainer, {opacity: AnimValues.enemy.damage.opacity}, AnimValues.enemy.damage.positionXY.getLayout()]}>
+                        <Text style={styles.damageText}>{damage}</Text>
+                    </Animated.View>
+                    <Text>{HpCurrent}</Text>
                 </View>
 
                 <Animated.View style={[ styles.Player, { transform: [{ translateY: AnimValues.player.move }] }]}>
@@ -65,7 +68,7 @@ const Battle = () => {
                                 </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => Avoid({props: {skill: "meteor"}})}>
+                        <TouchableOpacity onPress={() => UseSkill("attack")}>
                             <ImageBackground source={require("../assets/img/skills/skill2.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 2</Text>
                             </ImageBackground>
@@ -165,6 +168,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#ff592c',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    damageContainer: {
+        position: "absolute",
+        marginTop: -20,
+        marginLeft: 50
+    },
+    damageText: {
+        fontSize: 36,
+        fontWeight: "bold",
+        color: "#ffffff"
     }
 });
 
