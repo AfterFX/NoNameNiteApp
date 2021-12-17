@@ -24,38 +24,36 @@ import {
     HealthBar
 } from '../components/Animation'
 
-import {
-    getHealthBarBackgroundColor,
-    defaultColorPallet,
-    hexColorRegex
-} from './util/HealthBarUtils';
-
 // credentials context
 import { CredentialsContext } from '../components/CredentialsContext';
 
 
 const Battle = () => {
     const [SkillMeta, setSkillMeta] = useState({});
-    const UseSkill = (skill: string) => {
-        //render Animation states every time when using skill
-        setSkillMeta(AnimationStates.skills[skill])
-        new Avoid({props: {skill: skill}})
-    };
-    const percentage = 1;
-    const colors = defaultColorPallet;
+    const [HpCurrent, setHpCurrent] = useState(100);
+    const damage = 10; //percent how much minus from health
 
-    // console.log( getHealthBarBackgroundColor(percentage, colors))
+    const UseSkill = (skill: string) => {
+        setHpCurrent(HpCurrent-damage);
+        const HP = HpCurrent-damage;
+        //render Animation states every time when using skill
+        setSkillMeta(AnimationStates.skills[skill]);
+        Avoid({skill: skill, HpLeft: HP,});
+    };
 
     return (
         <View style={styles.container}>
             <Animated.View style={[ styles.effect, { transform: [{ translateX: AnimValues.shake1 }] }]}>
-                <Animated.View style={[ styles.Enemy, { transform: [{ translateY: AnimValues.enemy }] }]}>
-                    <Avatar source={require("../assets/img/characters/Villain_Ozzie_drawn_ChronoTrigger.png")}/>
-                    <Animated.View style={SkillMeta}/>
+                <View style={styles.Enemy}>
+                    <Animated.View style={[ { transform: [{ translateY: AnimValues.enemy.move }] }]}>
+                        <Avatar source={require("../assets/img/characters/Villain_Ozzie_drawn_ChronoTrigger.png")}/>
+                        <Animated.View style={SkillMeta}/>
+                    </Animated.View>
                     <HealthBar/>
-                </Animated.View>
+                        <Text>{HpCurrent}</Text>
+                </View>
 
-                <Animated.View style={[ styles.Player, { transform: [{ translateY: AnimValues.player }] }]}>
+                <Animated.View style={[ styles.Player, { transform: [{ translateY: AnimValues.player.move }] }]}>
                     <Avatar source={require("../assets/img/characters/CT1.jpeg")}/>
                 </Animated.View>
 
@@ -67,25 +65,25 @@ const Battle = () => {
                                 </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => new Avoid({props: {skill: "meteor"}})}>
+                        <TouchableOpacity onPress={() => Avoid({props: {skill: "meteor"}})}>
                             <ImageBackground source={require("../assets/img/skills/skill2.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 2</Text>
                             </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => attack(AnimValues)}>
+                        <TouchableOpacity onPress={() => attack()}>
                             <ImageBackground source={require("../assets/img/skills/skill3.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 3</Text>
                             </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => attack(AnimValues)}>
+                        <TouchableOpacity onPress={() => attack()}>
                             <ImageBackground source={require("../assets/img/skills/skill4.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 4</Text>
                             </ImageBackground>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => attack(AnimValues)}>
+                        <TouchableOpacity onPress={() => attack()}>
                             <ImageBackground source={require("../assets/img/skills/skill5.png")} style={styles.skillImage}>
                                 <Text style={styles.skill_title}>skill 5</Text>
                             </ImageBackground>

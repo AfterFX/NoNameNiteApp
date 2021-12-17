@@ -4,84 +4,82 @@ import React, {Component, useCallback, useRef, useState} from "react";
 
 const StatusBarHeight = Constants.statusBarHeight;
 
-export class Avoid extends Component<{}, { [key: string]: string }>{
-    constructor({props}: { props: any }) {
-        super(props);
-        this.state = {
+export const Avoid = (props: any) => {
+        const state = {
             skill: props.skill,
         }
-
-        if(this.state.skill === "meteor"){
-            this.meteor()
+        if(state.skill === "meteor"){
+            meteor(props.HpLeft)
         }
-    }
-
-    meteor() {
-        AnimValues.meteor.opacity.setValue(1)
-        const meteorDistance = 1000;
-        //set meteor start position
-        AnimValues.meteor.PositionX.setValue(320+meteorDistance);
-        AnimValues.meteor.PositionY.setValue(210+meteorDistance);
-
-        // shift Attacker to the ahead
-        Animated.timing(AnimValues.player, {
-            toValue: -20,
-            duration: 150,
-            useNativeDriver: true
-        }).start(() => {
-            // shift Attacker to the back
-            Animated.timing(AnimValues.player, {
-                toValue: 0,
-                duration: 150,
-                useNativeDriver: true
-            }).start()
-        })
-        //meteor moving
-        Animated.timing(AnimValues.meteor.XY, {
-            useNativeDriver: false,
-            toValue: {x: (-170+(-meteorDistance)), y: (-270+(-meteorDistance))},
-            duration: 750,
-            // easing: Easing.back(5),
-            // easing: Easing.bounce
-            // easing: Easing.elastic(3)
-            // easing: Easing.bezier(.06,1,.86,.23)
-        }).start(() => {
-            //meteor explode size
-            Animated.timing(AnimValues.meteor.scale, {
-                toValue: 10,
-                duration: 100,
-                useNativeDriver: false
-            }).start(() => {
-                //shake view when meteor explode
-                shake()
-                //hide meteor after explode
-                Animated.timing(AnimValues.meteor.opacity, {
-                    toValue: 0,
-                    duration: 1000,
-                    useNativeDriver: false
-                }).start(() => {
-                    //reset meteor location and size
-                    AnimValues.meteor.XY.setValue({x: 0, y: 0});
-                    AnimValues.meteor.scale.setValue(1);
-                });
-            });
-        })
-    }
 }
 
-export const attack = (state: any) => {
+const meteor = (HpLeft: number) => {
+    AnimValues.meteor.opacity.setValue(1)
+    const meteorDistance = 1000;
+    //set meteor start position
+    AnimValues.meteor.PositionX.setValue(320+meteorDistance);
+    AnimValues.meteor.PositionY.setValue(210+meteorDistance);
+
+    // shift Attacker to the ahead
+    Animated.timing(AnimValues.player.move, {
+        toValue: -20,
+        duration: 150,
+        useNativeDriver: true
+    }).start(() => {
+        // shift Attacker to the back
+        Animated.timing(AnimValues.player.move, {
+            toValue: 0,
+            duration: 150,
+            useNativeDriver: true
+        }).start()
+    })
+    //meteor moving
+    Animated.timing(AnimValues.meteor.XY, {
+        useNativeDriver: false,
+        toValue: {x: (-170+(-meteorDistance)), y: (-270+(-meteorDistance))},
+        duration: 750,
+        // easing: Easing.back(5),
+        // easing: Easing.bounce
+        // easing: Easing.elastic(3)
+        // easing: Easing.bezier(.06,1,.86,.23)
+    }).start(() => {
+        //meteor explode size
+        Animated.timing(AnimValues.meteor.scale, {
+            toValue: 10,
+            duration: 100,
+            useNativeDriver: false
+        }).start(() => {
+            //shake view when meteor explode
+            shake();
+            //Using Hp effect
+            HpEffect(HpLeft);
+            //hide meteor after explode
+            Animated.timing(AnimValues.meteor.opacity, {
+                toValue: 0,
+                duration: 1000,
+                useNativeDriver: false
+            }).start(() => {
+                //reset meteor location and size
+                AnimValues.meteor.XY.setValue({x: 0, y: 0});
+                AnimValues.meteor.scale.setValue(1);
+            });
+        });
+    })
+}
+
+export const attack = () => {
     // makes the sequence loop
     Animated.loop(
         // runs the animation array in sequence
         Animated.sequence([
             // Reset Attacker position
-            Animated.timing(state.player, {
+            Animated.timing(AnimValues.player.move, {
                 toValue: 0,
                 duration: 0,
                 useNativeDriver: true
             }),
             // shift Attacker to the ahead
-            Animated.timing(state.player, {
+            Animated.timing(AnimValues.player.move, {
                 toValue: -20,
                 duration: 150,
                 useNativeDriver: true
@@ -91,7 +89,7 @@ export const attack = (state: any) => {
         { iterations: 1 }
     ).start(() => {
         // shift Attacker to the back
-        Animated.timing(state.player, {
+        Animated.timing(AnimValues.player.move, {
             toValue: 0,
             duration: 150,
             useNativeDriver: true
@@ -100,19 +98,19 @@ export const attack = (state: any) => {
             // runs the animation array in sequence
             Animated.sequence([
                 // Reset Defender position
-                Animated.timing(state.enemy, {
+                Animated.timing(AnimValues.enemy.move, {
                     toValue: 0,
                     duration: 100,
                     useNativeDriver: true
                 }),
                 // shift Defender to the push back
-                Animated.timing(state.enemy, {
+                Animated.timing(AnimValues.enemy.move, {
                     toValue: -20,
                     duration: 150,
                     useNativeDriver: true
                 }),
                 // Reset Defender position
-                Animated.timing(state.enemy, {
+                Animated.timing(AnimValues.enemy.move, {
                     toValue: 0,
                     duration: 150,
                     useNativeDriver: true
@@ -125,56 +123,30 @@ export const attack = (state: any) => {
 };
 
 
-export const HealthBar = (damage: number) => {
-
-    const [value, setValue] = useState(0)
-    const [PreValue, setPreValue] = useState(0)
-    const state = {
-        width: new Animated.Value(value-(value-PreValue))
-    }
-    console.log(damage)
-
-
-    Animated.timing(state.width, {
-        toValue: value,
-        duration: 400,
-        easing: Easing.bezier(0.45,0.05,0.55,0.95),
-        useNativeDriver: false
-    }).start()
-
-    const handlePress = (choice: boolean) => {
-        if(choice){
-            setValue(value+10)
-            setPreValue(value)
-        }else{
-            setValue(value-10)
-            setPreValue(value)
-        }
-
-    }
-
+export const HealthBar = () => {
     return(
         <View style={styles.healthBarContainer}>
             <View style={styles.healthBarBackground}>
                 <Animated.View style={[styles.healthBarProgress, {
-                    width: state.width.interpolate({
+                    width: AnimValues.enemy.HP.interpolate({
                         inputRange: [0, 100],
                         outputRange: [`0%`, '100%'],
                     }),
-                    backgroundColor: state.width.interpolate({
-                        inputRange: [0, 50, 100],
-                        outputRange: ['rgba(248,7,7,0.8)', 'rgba(248,7,7,0.8)', 'rgba(30, 70, 30, 1.0)'],
+                    backgroundColor: AnimValues.enemy.HP.interpolate({
+                        inputRange: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+                        outputRange: ['rgb(198,21,21)',
+                            'rgb(198,46,21)',
+                            'rgb(203,64,21)',
+                            'rgb(198,103,21)',
+                            'rgb(198,144,21)',
+                            'rgb(198,171,21)',
+                            'rgb(198,198,21)',
+                            'rgb(171,198,21)',
+                            'rgb(115,198,21)',
+                            'rgb(21,198,33)',],
                     }),
                 }]}/>
-
-
             </View>
-            {/*<TouchableOpacity onPress={() => handlePress(true)}>*/}
-            {/*    <Text>Add value</Text>*/}
-            {/*</TouchableOpacity>*/}
-            {/*<TouchableOpacity onPress={() => handlePress(false)}>*/}
-            {/*    <Text>Minus value</Text>*/}
-            {/*</TouchableOpacity>*/}
         </View>
     )
 };
@@ -197,7 +169,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     healthBarBackground: {
-        position: "relative",
+        position: "absolute",
         width: 200,
         height: 10,
         backgroundColor: "#a8a8a8",
@@ -215,8 +187,8 @@ const styles = StyleSheet.create({
 
 //Default animation values
 export const AnimValues = {
-    player: new Animated.Value(0),
-    enemy: new Animated.Value(0),
+    player: {move: new Animated.Value(0)},
+    enemy: { move: new Animated.Value(0), HP: new Animated.Value(100)},
     shake1: new Animated.Value(0),
     meteor: {
         XY: new Animated.ValueXY({x: 0, y: 0}),
@@ -253,4 +225,13 @@ const shake = () => {
         // loops the above animation config 2 times
         {iterations: 1}
     ).start()
+}
+
+const HpEffect = (HpLeft: number) => {
+    Animated.timing(AnimValues.enemy.HP, {
+        toValue: HpLeft,
+        duration: 400,
+        easing: Easing.bezier(0.45,0.05,0.55,0.95),
+        useNativeDriver: false
+    }).start()
 }
