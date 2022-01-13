@@ -4,7 +4,8 @@ import React, {Component, useCallback, useRef, useState} from "react";
 
 const StatusBarHeight = Constants.statusBarHeight;
 
-export const Avoid = (props: any) => {
+export const Avoid = (props: any, setStoredHealth: (number: { player: { health: number } }) => void) => {
+
         const state = {
             skill: props.skill,
         }
@@ -16,6 +17,7 @@ export const Avoid = (props: any) => {
             break;
         case "meteor":
             meteor(props.HpLeft)
+            setStoredHealth({player: {health: props.HpLeft}})
             // code block
             break;
         default:

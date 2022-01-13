@@ -1,4 +1,4 @@
-import React, {useContext, useRef, useCallback, useState, Component} from 'react';
+import React, {useContext, useRef, useCallback, useState, Component, createContext} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {Text, View, StyleSheet, Animated, Dimensions, Image, TouchableOpacity, ImageBackground} from 'react-native';
 
@@ -25,10 +25,17 @@ import {
 } from '../components/Animation'
 
 // credentials context
-import { CredentialsContext } from '../components/CredentialsContext';
+import { Health } from '../components/Health';
+
+// console.log(Health)
 
 
 const Battle = () => {
+    const {storedHealth, setStoredHealth} = useContext(Health);
+
+
+    console.log(storedHealth.player.health)//continue here.... all states in one
+
     const [SkillMeta, setSkillMeta] = useState({});
     const [HpCurrent, setHpCurrent] = useState(100);
     const damage = 10; //percent how much minus from health
@@ -38,7 +45,7 @@ const Battle = () => {
         const HP = HpCurrent-damage;
         //render Animation states every time when using skill
         setSkillMeta(AnimationStates.skills[skill]);
-        Avoid({skill: skill, HpLeft: HP,});
+        Avoid({skill: skill, HpLeft: HP,}, setStoredHealth);
     };
 
     return (

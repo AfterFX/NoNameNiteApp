@@ -11,10 +11,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // credentials context
 import { CredentialsContext } from './components/CredentialsContext';
+import { Health } from "./components/Health";
 
 export default function App() {
   const [appReady, setAppReady] = useState(false);
   const [storedCredentials, setStoredCredentials] = useState("");
+  const [storedHealth, setStoredHealth] = useState(0);
 
   const checkLoginCredentials = () => {
     AsyncStorage.getItem('natureCribCredentials')
@@ -34,7 +36,9 @@ export default function App() {
 
   return (
     <CredentialsContext.Provider value={{ storedCredentials, setStoredCredentials }}>
-      <RootStack />
+        <Health.Provider value={{ storedHealth, setStoredHealth }}>
+            <RootStack />
+        </Health.Provider>
     </CredentialsContext.Provider>
   );
 }
