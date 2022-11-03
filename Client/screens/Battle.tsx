@@ -34,7 +34,7 @@ const Battle = () => {
     const {storedHealth, setStoredHealth} = useContext(Health);
 
 
-    console.log(storedHealth.player.health)//continue here.... all states in one
+    // console.log(storedHealth.player.health)//continue here.... all states in one
 
     const [SkillMeta, setSkillMeta] = useState({});
     const [HpCurrent, setHpCurrent] = useState(100);
